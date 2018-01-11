@@ -1,0 +1,7 @@
+# not required by setup.py..
+tox
+coverage
+django-coverage
+flake8
+
+django==1.11

@@ -1,0 +1,43 @@
+from django.conf import settings
+from django.conf.urls import url
+from django.contrib import admin
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
+from django.db import models
+from django.http import JsonResponse
+
+from inline_addons.models import FrontendUser, Editor
+
+
+# admin.site.unregister(get_user_model())
+
+class SeparateUserAdminBase(UserAdmin):
+
+    def get_urls(self):
+        model_name_lower = self.model.__name__.lower()
+        return [
+            url(
+                r'^(.+)/password/$',
+                self.admin_site.admin_view(self.user_change_password),
+                name='inline_addons_{}_password_change'.format(model_name_lower),
+            ),
+        ] + super(SeparateUserAdminBase, self).get_urls()
+
+
+class FrontendUserAdmin(SeparateUserAdminBase):
+    readonly_fields = ['date_joined', 'last_login', 'is_staff', 'is_superuser', 'groups', 'user_permissions', ]
+    list_filter = ['is_active', 'groups', ]
+    list_display = ['username', 'is_active', 'get_groups', ]
+
+
+admin.site.register(FrontendUser, FrontendUserAdmin)
+
+
+class EditorAdmin(SeparateUserAdminBase):
+    exclude = []
+    readonly_fields = ['date_joined', 'last_login', 'is_staff', 'is_superuser', 'user_permissions', ]
+    list_filter = ['is_active', 'groups', ]
+    list_display = ['username', 'is_active', 'get_groups', ]
+
+
+admin.site.register(Editor, EditorAdmin)
