@@ -19,10 +19,6 @@ DATABASES = {
     }
 }
 
-MIGRATION_MODULES = {
-    'inline_addons': 'inline_addons.tests.test_app.migrations',
-}
-
 LANGUAGE_CODE = 'en'
 LANGUAGES = (
     ('en', 'ENGLISHS' ),

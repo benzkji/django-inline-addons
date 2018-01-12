@@ -1,43 +1,59 @@
-from django.conf import settings
+from functools import partial
+
+from django import forms
 from django.conf.urls import url
 from django.contrib import admin
-from django.contrib.auth import get_user_model
+from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.auth.admin import UserAdmin
-from django.db import models
-from django.http import JsonResponse
+from django.forms.models import InlineForeignKeyField, modelformset_factory, BaseInlineFormSet
 
-from inline_addons.models import FrontendUser, Editor
-
-
-# admin.site.unregister(get_user_model())
-
-class SeparateUserAdminBase(UserAdmin):
-
-    def get_urls(self):
-        model_name_lower = self.model.__name__.lower()
-        return [
-            url(
-                r'^(.+)/password/$',
-                self.admin_site.admin_view(self.user_change_password),
-                name='inline_addons_{}_password_change'.format(model_name_lower),
-            ),
-        ] + super(SeparateUserAdminBase, self).get_urls()
+from inline_addons.tests.test_app.models import MasterModel
 
 
-class FrontendUserAdmin(SeparateUserAdminBase):
-    readonly_fields = ['date_joined', 'last_login', 'is_staff', 'is_superuser', 'groups', 'user_permissions', ]
-    list_filter = ['is_active', 'groups', ]
-    list_display = ['username', 'is_active', 'get_groups', ]
+class PopupInlineForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(PopupInlineForm, self).__init__(*args, **kwargs)
+        print self.fields
 
 
-admin.site.register(FrontendUser, FrontendUserAdmin)
+class VisibleInlineForeignKeyField(InlineForeignKeyField):
+    widget = forms.Select
 
 
-class EditorAdmin(SeparateUserAdminBase):
-    exclude = []
-    readonly_fields = ['date_joined', 'last_login', 'is_staff', 'is_superuser', 'user_permissions', ]
-    list_filter = ['is_active', 'groups', ]
-    list_display = ['username', 'is_active', 'get_groups', ]
+class PopupInlineFormSet(BaseInlineFormSet):
+
+    def add_fields(self, form, index):
+        print "formset:"
+        print form.fields
+        # print form.get_fieldset()
+        super(PopupInlineFormSet, self).add_fields(form, index)
+        print form.fields
+        # print form.get_fieldset()
+        form.fields['master'] = forms.ModelChoiceField(queryset=MasterModel.objects.all())
 
 
-admin.site.register(Editor, EditorAdmin)
+class PopupInline(InlineModelAdmin):
+    template = 'inline_addons/popup_inline.html'
+    form = PopupInlineForm
+    formset =  PopupInlineFormSet
+
+    def get_fields(self, request, obj=None):
+        return ['master', 'title', ]
+
+    def zzz_get_formset(self, request, **kwargs):
+        """
+        Returns a FormSet class for use on the changelist page if list_editable
+        is used.
+        """
+        defaults = {
+            "formfield_callback": partial(self.formfield_for_dbfield, request=request),
+        }
+        defaults.update(kwargs)
+        print "its here!"
+        return modelformset_factory(
+            self.model, self.get_changelist_form(request), extra=0,
+            fields=self.list_editable,
+            widgets={self.fk_name: forms.ChoiceField}
+            **defaults
+        )
