@@ -82,6 +82,11 @@
         var text = $('#' + id + "_textual");
         input.val(newId);
         text.html(newRepr);
+        // modify management form, to prevent a double save
+        var prefix = input.closest('.popup-inline-group').attr('data-prefix');
+        var selector = '#id_' + prefix + '-INITIAL_FORMS';
+        var initial_forms = $(selector);
+        initial_forms.val(parseInt(initial_forms.val()) + 1);
         win.close();
     }
 
