@@ -76,6 +76,10 @@
     //     }
     // }
 
+
+    // still need from here:
+    // https://docs.djangoproject.com/en/2.0/ref/contrib/admin/javascript/
+
     function dismissAddInlineObjectPopup(win, newId, newRepr) {
         var id = windowname_to_id(win.name);
         var input = $('#' + id);
