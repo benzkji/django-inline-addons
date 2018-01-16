@@ -7,79 +7,6 @@
 (function($) {
     'use strict';
 
-    // get those from the original!
-    // // IE doesn't accept periods or dashes in the window name, but the element IDs
-    // // we use to generate popup window names may contain them, therefore we map them
-    // // to allowed characters in a reversible way so that we can locate the correct
-    // // element when the popup window is dismissed.
-    // function id_to_windowname(text) {
-    //     text = text.replace(/\./g, '__dot__');
-    //     text = text.replace(/\-/g, '__dash__');
-    //     return text;
-    // }
-    //
-    // function windowname_to_id(text) {
-    //     text = text.replace(/__dot__/g, '.');
-    //     text = text.replace(/__dash__/g, '-');
-    //     return text;
-    // }
-
-    // function showAdminPopup(triggeringLink, name_regexp, add_popup) {
-    //     var name = triggeringLink.id.replace(name_regexp, '');
-    //     name = id_to_windowname(name);
-    //     var href = triggeringLink.href;
-    //     if (add_popup) {
-    //         if (href.indexOf('?') === -1) {
-    //             href += '?_popup=1';
-    //         } else {
-    //             href += '&_popup=1';
-    //         }
-    //     }
-    //     var win = window.open(href, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
-    //     win.focus();
-    //     return false;
-    // }
-
-    // function showRelatedObjectLookupPopup(triggeringLink) {
-    //     return showAdminPopup(triggeringLink, /^lookup_/, true);
-    // }
-
-    // function dismissRelatedLookupPopup(win, chosenId) {
-    //     var name = windowname_to_id(win.name);
-    //     var elem = document.getElementById(name);
-    //     if (elem.className.indexOf('vManyToManyRawIdAdminField') !== -1 && elem.value) {
-    //         elem.value += ',' + chosenId;
-    //     } else {
-    //         document.getElementById(name).value = chosenId;
-    //     }
-    //     win.close();
-    // }
-    //
-    // function showRelatedObjectPopup(triggeringLink) {
-    //     return showAdminPopup(triggeringLink, /^(change|add|delete)_/, false);
-    // }
-
-    // function updateRelatedObjectLinks(triggeringLink) {
-    //     var $this = $(triggeringLink);
-    //     var siblings = $this.nextAll('.change-related, .delete-related');
-    //     if (!siblings.length) {
-    //         return;
-    //     }
-    //     var value = $this.val();
-    //     if (value) {
-    //         siblings.each(function() {
-    //             var elm = $(this);
-    //             elm.attr('href', elm.attr('data-href-template').replace('__fk__', value));
-    //         });
-    //     } else {
-    //         siblings.removeAttr('href');
-    //     }
-    // }
-
-
-    // still need from here:
-    // https://docs.djangoproject.com/en/2.0/ref/contrib/admin/javascript/
-
     function dismissAddInlineObjectPopup(win, newId, newRepr) {
         var id = windowname_to_id(win.name);
         var input = $('#' + id);
@@ -103,32 +30,18 @@
         win.close();
     }
 
-    // probably never used with inlines!?
+    // probably never used with popuo inlines!?
     function dismissDeleteInlineObjectPopup(win, objId) {
-        var id = windowname_to_id(win.name).replace(/^delete_/, '');
-        var selectsSelector = interpolate('#%s, #%s_from, #%s_to', [id, id, id]);
-        var selects = $(selectsSelector);
-        selects.find('option').each(function() {
-            if (this.value === objId) {
-                $(this).remove();
-            }
-        }).trigger('change');
-        win.close();
+        alert('dismissDeleteInlineObjectPopup not implemented!');
     }
 
-    // Global for testing purposes
-    // window.id_to_windowname = id_to_windowname;
-    // window.windowname_to_id = windowname_to_id;
-
-    // window.showRelatedObjectLookupPopup = showRelatedObjectLookupPopup;
-    // window.dismissRelatedLookupPopup = dismissRelatedLookupPopup;
-    // window.showRelatedObjectPopup = showRelatedObjectPopup;
-    // window.updateRelatedObjectLinks = updateRelatedObjectLinks;
+    // Globals, for when coming back
     window.dismissAddInlineObjectPopup = dismissAddInlineObjectPopup;
     window.dismissChangeInlineObjectPopup = dismissChangeInlineObjectPopup;
     window.dismissDeleteInlineObjectPopup = dismissDeleteInlineObjectPopup;
 
     $(document).ready(function() {
+        // fetch the add!
         $(document).on('formset:added', function(event, $row, formsetName) {
             if ($row.hasClass('popup-inline')) {
                 // trigger popup
@@ -136,42 +49,5 @@
             }
         });
     });
-
-    // Kept for backward compatibility
-    // window.showAddAnotherPopup = showRelatedObjectPopup;
-    // window.dismissAddAnotherPopup = dismissAddRelatedObjectPopup;
-
-    // $(document).ready(function() {
-    //     $("a[data-popup-opener]").click(function(event) {
-    //         event.preventDefault();
-    //         opener.dismissRelatedLookupPopup(window, $(this).data("popup-opener"));
-    //     });
-    //     $('body').on('click', '.related-widget-wrapper-link', function(e) {
-    //         e.preventDefault();
-    //         if (this.href) {
-    //             var event = $.Event('django:show-related', {href: this.href});
-    //             $(this).trigger(event);
-    //             if (!event.isDefaultPrevented()) {
-    //                 showRelatedObjectPopup(this);
-    //             }
-    //         }
-    //     });
-    //     $('body').on('change', '.related-widget-wrapper select', function(e) {
-    //         var event = $.Event('django:update-related');
-    //         $(this).trigger(event);
-    //         if (!event.isDefaultPrevented()) {
-    //             updateRelatedObjectLinks(this);
-    //         }
-    //     });
-    //     $('.related-widget-wrapper select').trigger('change');
-    //     $('body').on('click', '.related-lookup', function(e) {
-    //         e.preventDefault();
-    //         var event = $.Event('django:lookup-related');
-    //         $(this).trigger(event);
-    //         if (!event.isDefaultPrevented()) {
-    //             showRelatedObjectLookupPopup(this);
-    //         }
-    //     });
-    // });
 
 })(django.jQuery);
