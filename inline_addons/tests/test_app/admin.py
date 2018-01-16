@@ -15,9 +15,6 @@ class InlineModel2Inline(PopupInline):
     exclude = ['title', ]
     extra = 0
 
-    class Media:
-        js = ('inline_addons/js/inline_popup_handling.js', )
-
 
 class MasterModelAdmin(admin.ModelAdmin):
     inlines = [InlineModel1Inline, InlineModel2Inline]
