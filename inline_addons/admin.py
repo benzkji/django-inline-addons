@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.admin import widgets
+from django.forms import widgets
 from django.contrib.admin.options import InlineModelAdmin
 
 
