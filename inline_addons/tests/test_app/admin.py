@@ -11,8 +11,9 @@ class InlineModel1Inline(admin.StackedInline):
 
 class InlineModel2Inline(PopupInline):
     model = InlineModel2
-    fields = []
+    # fields = ['title']
     exclude = ['title', ]
+    extra = 0
 
     class Media:
         js = ('inline_addons/js/inline_popup_handling.js', )

@@ -128,6 +128,15 @@
     window.dismissChangeInlineObjectPopup = dismissChangeInlineObjectPopup;
     window.dismissDeleteInlineObjectPopup = dismissDeleteInlineObjectPopup;
 
+    $(document).ready(function() {
+        $(document).on('formset:added', function(event, $row, formsetName) {
+            if ($row.hasClass('popup-inline')) {
+                // trigger popup
+                $row.find('.inlinechangelink')[0].click();
+            }
+        });
+    });
+
     // Kept for backward compatibility
     // window.showAddAnotherPopup = showRelatedObjectPopup;
     // window.dismissAddAnotherPopup = dismissAddRelatedObjectPopup;

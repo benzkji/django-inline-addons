@@ -8,6 +8,7 @@ class PopupInline(InlineModelAdmin):
 
 
 class PopupInlineAdmin(admin.ModelAdmin):
+    extra = 0
     popup_response_template = 'inline_addons/popup_inline_response.html'
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):

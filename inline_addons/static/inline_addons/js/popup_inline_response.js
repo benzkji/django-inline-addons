@@ -2,7 +2,6 @@
 (function() {
     'use strict';
     var initData = JSON.parse(document.getElementById('django-admin-popup-response-constants').dataset.popupResponse);
-    opener.console.log(initData);
     switch(initData.action) {
     case 'change':
         opener.dismissChangeInlineObjectPopup(window, initData.value, initData.obj, initData.new_value);
