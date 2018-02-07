@@ -1,5 +1,8 @@
 {% load i18n admin_urls static %}
-<div class="js-inline-admin-formset inline-group popup-inline-group"
+<div class="
+        js-inline-admin-formset inline-group popup-inline-group
+        {% if not inline_admin_formset.formset.parent_obj %}save-first-inline{% endif %}
+        "
      data-prefix="{{ inline_admin_formset.formset.prefix }}"
      id="{{ inline_admin_formset.formset.prefix }}-group"
      data-inline-type="stacked"
@@ -9,38 +12,45 @@
 {{ inline_admin_formset.formset.management_form }}
 {{ inline_admin_formset.formset.non_form_errors }}
 
-{% for inline_admin_form in inline_admin_formset %}
-    <div class="inline-related popup-inline
-    {% if inline_admin_form.original or inline_admin_form.show_url %} has_original{% endif %}{% if forloop.last %} empty-form last-related{% endif %}" id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
-  <h3><b>{{ inline_admin_formset.opts.verbose_name|capfirst }}:</b>&nbsp;
-              <span class="inline_label">
-                  <span id="id_{{ inline_admin_form.form.prefix }}-{{ inline_admin_form.pk_field.field.name }}_textual">
-                      {% if inline_admin_form.original %}{{ inline_admin_form.original }}{% endif %}
-                  </span>
-                    <a
-                        id="change_id_{{ inline_admin_form.form.prefix }}-{{ inline_admin_form.pk_field.field.name }}"
-                        class="related-widget-wrapper-link  inlinechangelink"
-                        {% if inline_admin_form.original %}
-                        href="{% url inline_admin_form.model_admin.opts|admin_urlname:'change' inline_admin_form.original.pk|admin_urlquote %}?_to_field=id&_popup=True"
-                        {% else %}
-                        href="{% url inline_admin_form.model_admin.opts|admin_urlname:'add' %}?_to_field=id&{{ inline_admin_form.fk_field.field.name }}={{ inline_admin_form.fk_field.field.value }}&_popup=True"
-                        {% endif %}
-                    ></a>
-      </span>
-      {% if inline_admin_form.show_url %}<a href="{{ inline_admin_form.absolute_url }}">{% trans "View on site" %}</a>{% endif %}
-    {% if inline_admin_formset.formset.can_delete and inline_admin_form.original %}<span class="delete">{{ inline_admin_form.deletion_field.field }} {{ inline_admin_form.deletion_field.label_tag }}</span>{% endif %}
-  </h3>
+{% if not inline_admin_formset.formset.parent_obj %}
+    <div class="inline-related popup-inline ">
+        <h3>{% trans 'Please save first to add a' %} {{ inline_admin_formset.opts.verbose_name|capfirst }}</h3>
+    </div>
+{% else %}
+    {% for inline_admin_form in inline_admin_formset %}
+        <div class="inline-related popup-inline
+        {% if inline_admin_form.original or inline_admin_form.show_url %} has_original{% endif %}{% if forloop.last %} empty-form last-related{% endif %}" id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
+        <h3><b>{{ inline_admin_formset.opts.verbose_name|capfirst }}:</b>&nbsp;
+                  <span class="inline_label">
+                      <span id="id_{{ inline_admin_form.form.prefix }}-{{ inline_admin_form.pk_field.field.name }}_textual">
+                          {% if inline_admin_form.original %}{{ inline_admin_form.original }}{% endif %}
+                      </span>
+                        <a
+                            id="change_id_{{ inline_admin_form.form.prefix }}-{{ inline_admin_form.pk_field.field.name }}"
+                            class="related-widget-wrapper-link  inlinechangelink"
+                            {% if inline_admin_form.original %}
+                            href="{% url inline_admin_form.model_admin.opts|admin_urlname:'change' inline_admin_form.original.pk|admin_urlquote %}?_to_field=id&_popup=True"
+                            {% else %}
+                            href="{% url inline_admin_form.model_admin.opts|admin_urlname:'add' %}?_to_field=id&{{ inline_admin_form.fk_field.field.name }}={{ inline_admin_form.fk_field.field.value }}&_popup=True"
+                            {% endif %}
+                        ></a>
+          </span>
+          {% if inline_admin_form.show_url %}<a href="{{ inline_admin_form.absolute_url }}">{% trans "View on site" %}</a>{% endif %}
+        {% if inline_admin_formset.formset.can_delete and inline_admin_form.original %}<span class="delete">{{ inline_admin_form.deletion_field.field }} {{ inline_admin_form.deletion_field.label_tag }}</span>{% endif %}
+        </h3>
 
-  {% if inline_admin_form.form.non_field_errors %}{{ inline_admin_form.form.non_field_errors }}{% endif %}
+        {% if inline_admin_form.form.non_field_errors %}{{ inline_admin_form.form.non_field_errors }}{% endif %}
 
-    {% for fieldset in inline_admin_form %}
-        {% include "admin/includes/fieldset.html" %}
+        {% for fieldset in inline_admin_form %}
+            {% include "admin/includes/fieldset.html" %}
+        {% endfor %}
+        {% if inline_admin_form.needs_explicit_pk_field %}
+          {{ inline_admin_form.pk_field.field }}
+        {% endif %}
+        {{ inline_admin_form.fk_field.field }}
+
+        </div>
     {% endfor %}
-  {% if inline_admin_form.needs_explicit_pk_field %}
-      {{ inline_admin_form.pk_field.field }}
-  {% endif %}
-  {{ inline_admin_form.fk_field.field }}
-
-</div>{% endfor %}
+{% endif %}
 </fieldset>
 </div>

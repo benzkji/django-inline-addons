@@ -13,8 +13,18 @@ class PopupInline(InlineModelAdmin):
         js = (
             'inline_addons/js/inline_popup_handling.js',
         )
+        css = {
+            'all': (
+                'inline_addons/css/popup_inline.css',
+            )
+        }
         original_media = super(PopupInline, self).media
-        return original_media + widgets.Media(js=js)
+        return original_media + widgets.Media(js=js, css=css)
+
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super(PopupInline, self).get_formset(request, obj, **kwargs)
+        formset.parent_obj = obj
+        return formset
 
 
 class PopupInlineAdmin(admin.ModelAdmin):
