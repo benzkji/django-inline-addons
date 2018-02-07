@@ -14,7 +14,7 @@
         var change_link = $('#change_' + id + "");
         input.val(newId);
         text.html(newRepr);
-        // this feels a bit sketchy: change to edit
+        // TODO: this feels a bit sketchy: after add, the add link is morphed into a change link!
         change_link.attr('href', change_link.attr('href').replace('/add/?', '/' + newId + '/change/?'));
         // modify management form, to prevent a double save
         var prefix = input.closest('.popup-inline-group').attr('data-prefix');
