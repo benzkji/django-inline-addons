@@ -11,8 +11,11 @@
         var id = windowname_to_id(win.name);
         var input = $('#' + id);
         var text = $('#' + id + "_textual");
+        var change_link = $('#change_' + id + "");
         input.val(newId);
         text.html(newRepr);
+        // this feels a bit sketchy: change to edit
+        change_link.attr('href', change_link.attr('href').replace('/add/?', '/' + newId + '/change/?'));
         // modify management form, to prevent a double save
         var prefix = input.closest('.popup-inline-group').attr('data-prefix');
         var selector = '#id_' + prefix + '-INITIAL_FORMS';
