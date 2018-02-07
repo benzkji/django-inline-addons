@@ -11,7 +11,7 @@ class PopupInline(InlineModelAdmin):
     @property
     def media(self):
         js = (
-            'inline_addons/js/inline_popup_handling.js',
+            'inline_addons/js/popup_inline_handling.js',
         )
         css = {
             'all': (
