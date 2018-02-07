@@ -1,3 +1,4 @@
+# djanog-inline-addons
 
 [![Build Status](https://travis-ci.org/bnzk/django-inline-addons.svg "Build Status")](https://travis-ci.org/bnzk/django-inline-addons/)
 [![PyPi Version](https://img.shields.io/pypi/v/django-inline-addons.svg "PyPi Version")](https://pypi.python.org/pypi/django-inline-addons/)
