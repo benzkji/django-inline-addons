@@ -7,7 +7,7 @@
 ### Implemented
 - popup inlines
 
-### Needed
+### Needed/Wanted
 
 - make django inlines more consistent with it's delete behaviour
 
