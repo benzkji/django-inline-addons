@@ -28,7 +28,7 @@ In your settings, add to `INSTALLED_APPS`
 ### Popup Inlines
 
 Instead of stacked or tabular inlines, you'll use a PopupInline. You'll further need to register your inline
-model with the normal admin.site, otherwise the opened popup cannt show you a form. For now, this means that
+model with the normal admin.site, otherwise the opened popup cannt show you a add-/changeform. For now, this means that
 the model will show up in django admin dashboard and in my_app's app overview. Hope to find a way to hide it.
 
     from django.contrib import admin
