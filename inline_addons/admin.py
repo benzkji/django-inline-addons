@@ -30,6 +30,13 @@ class PopupInline(InlineModelAdmin):
 class PopupInlineAdmin(admin.ModelAdmin):
     popup_response_template = 'inline_addons/popup_inline_response.html'
 
+    def get_model_perms(self, request):
+        """
+        Return empty perms dict thus hiding the model from admin index.
+        https://stackoverflow.com/questions/2431727/django-admin-hide-a-model
+        """
+        return {}
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         # TODO: raise wrong configured when no fk_name!
         if (db_field.name == self.fk_name):
