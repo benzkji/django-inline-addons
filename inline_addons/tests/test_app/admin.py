@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django import forms
 
 from inline_addons.admin import PopupInline, PopupInlineAdmin
 from inline_addons.tests.test_app.models import InlineModel1, InlineModel2, MasterModel

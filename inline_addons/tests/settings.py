@@ -21,7 +21,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en'
 LANGUAGES = (
-    ('en', 'ENGLISHS' ),
+    ('en', 'ENGLISH', ),
 )
 
 ROOT_URLCONF = 'inline_addons.tests.urls'

@@ -9,9 +9,9 @@ class MasterModel(models.Model):
     )
     test1 = models.ForeignKey(
         'test_app.MasterModel',
-        null = True,
-        default = None,
-        blank = True,
+        null=True,
+        default=None,
+        blank=True,
     )
 
     def __str__(self):
