@@ -4,6 +4,11 @@
 - ...
 
 
+==== 0.0.2 ===
+
+- django 4 compat
+
+
 ==== 0.0.1 ===
 
 - initial release
